@@ -1,0 +1,9 @@
+*.gem
+.bundle
+.metrics
+.rspec
+Gemfile.lock
+coverage/*
+pkg/*
+spec/dummy/log
+tmp/*
