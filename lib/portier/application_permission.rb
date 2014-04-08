@@ -1,5 +1,23 @@
+#*************************************************************************************
+# Control the access for each controller actions
+#*************************************************************************************
 class Portier::ApplicationPermission < Portier::BasePermission
+  def self.action_tree(action)
+    case action.to_s
+      when 'index' then [:index, :consult, :default]
+      when 'show' then [:show, :consult, :default]
+      when 'new' then [:new, :add, :default]
+      when 'create' then [:create, :add, :default]
+      when 'edit' then [:edit, :modify, :default]
+      when 'update' then [:update, :modify, :default]
+      when 'destroy' then [:destroy, :default]
+      else [action.to_sym, :default]
+    end
+  end
+
+
   def build_permitted_params
+    puts params.inspect + record_name.inspect
     ps = self.respond_to?(:permitted_params) ? permitted_params : []
 
     params.require(record_name).permit ps
@@ -17,26 +35,15 @@ class Portier::ApplicationPermission < Portier::BasePermission
   end
 
   def granted?(action)
-    granted = nil
-
-    action_tree(action).each { |act| granted = self.send(act) if self.respond_to?(act) and granted.nil? }
-
-    granted ? true : false
+    action_tree(action).each { |act| return self.send(act) if self.respond_to?(act) }
   end
+
 
   private
 
+
   def action_tree(action)
-    case action.to_s
-      when 'index' then [:index, :consult, :default]
-      when 'show' then [:show, :consult, :default]
-      when 'new' then [:new, :add, :default]
-      when 'create' then [:new, :add, :default]
-      when 'edit' then [:edit, :modify, :default]
-      when 'update' then [:update, :modify, :default]
-      when 'destroy' then [:destroy, :default]
-      else [action.to_sym, :default]
-    end
+    Portier::ApplicationPermission.action_tree(action)
   end
 
   def current_record
@@ -66,6 +73,7 @@ class Portier::ApplicationPermission < Portier::BasePermission
   def record_name
     controller.singularize.to_sym
   end
+
 
   def method_missing(*args, &block)
     if args.first == record_name and model_exists?

@@ -6,7 +6,6 @@ require 'simplecov-rcov-text'
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
   SimpleCov::Formatter::HTMLFormatter,
   SimpleCov::Formatter::RcovTextFormatter,
-  Coveralls::SimpleCov::Formatter
 ]
 
 SimpleCov.start do

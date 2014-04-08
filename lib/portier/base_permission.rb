@@ -1,3 +1,7 @@
+#*************************************************************************************
+# Basic Permission object to cut some duplication.
+# ApplicationPermission and ViewTagsPermission inherit from it
+#*************************************************************************************
 class Portier::BasePermission
   attr_reader :application_controller, :current_user
 

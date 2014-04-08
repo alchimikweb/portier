@@ -1,3 +1,7 @@
+#*************************************************************************************
+# Check if the access is granted or refused depending on the permission
+# setted in the permission files.
+#*************************************************************************************
 class Portier::Base
   attr_reader :application_controller, :current_user
 

@@ -1,3 +1,6 @@
+#*************************************************************************************
+# Control the access using a tag.
+#*************************************************************************************
 class Portier::ViewTagsPermission < Portier::BasePermission
   def can_view?(tag, options={})
     if self.respond_to? tag.to_sym
