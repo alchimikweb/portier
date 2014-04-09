@@ -13,10 +13,16 @@ class Portier::Base
   end
 
   def authorize_action
-    raise Portier::AccessDenied if not permission.granted? action
+    raise Portier::AccessDenied if not base_permission.granted? action
   end
 
   def can?(action, object, options={})
+    object_name = if object.is_a? Symbol or object.is_a? String
+      object.to_s.singularize.pluralize
+    else
+      object.class.name
+    end
+    permission = permission_for object_name
     permission.can? action, object, options
   end
 
@@ -25,7 +31,7 @@ class Portier::Base
   end
 
   def permitted_params
-    permission.build_permitted_params if permission.respond_to? :permitted_params
+    base_permission.build_permitted_params if base_permission.respond_to? :permitted_params
   end
 
   private
@@ -34,20 +40,20 @@ class Portier::Base
     request[:action]
   end
 
+  def base_permission
+    @base_permission ||= permission_for controller
+  end
+
   def controller
     request[:controller]
   end
 
-  def permission
-    if not @permission_object
-      begin
-        @permission_object = "#{controller.camelize}Permission".constantize.new(application_controller, current_user)
-      rescue
-        raise "Portier says: You must define #{controller.camelize}Permission in app/permissions/#{controller}_permission.rb. See documentation for more details."
-      end
+  def permission_for(target)
+    begin
+      "#{target.camelize}Permission".constantize.new(application_controller, current_user)
+    rescue
+      raise Portier::Uninitalized, "You must define #{controller.camelize}Permission in app/permissions/#{controller}_permission.rb. See documentation for more details."
     end
-
-    @permission_object
   end
 
   def view_permission
@@ -55,7 +61,7 @@ class Portier::Base
       begin
         @view_permission_object = "ViewTagsPermission".constantize.new(application_controller, current_user)
       rescue
-        raise "Portier says: You must define ViewTagsPermission in app/permissions/view_tags_permission.rb in order to use view permission. See documentation for more details."
+        raise Portier::Uninitalized, "You must define ViewTagsPermission in app/permissions/view_tags_permission.rb in order to use view permission. See documentation for more details."
       end
     end
 

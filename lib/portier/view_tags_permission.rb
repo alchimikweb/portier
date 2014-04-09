@@ -8,7 +8,7 @@ class Portier::ViewTagsPermission < Portier::BasePermission
 
       self.send(tag.to_sym)
     else
-      raise "Portier says: You must define the method \"#{tag}\" in the view tags file (app/permissions/view_tags_permission.rb). See documentation for more details."
+      raise Portier::NoPermissionError, "You must define the method \"#{tag}\" in the view tags file (app/permissions/view_tags_permission.rb). See documentation for more details."
     end
   end
 end

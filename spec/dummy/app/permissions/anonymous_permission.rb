@@ -1,6 +1,6 @@
 class AnonymousPermission < Portier::ApplicationPermission
   def default
-    true
+    false
   end
 
   def index
@@ -13,6 +13,10 @@ class AnonymousPermission < Portier::ApplicationPermission
 
   def modify
     false
+  end
+
+  def destroy
+    anonymou.open?
   end
 
   def permitted_params

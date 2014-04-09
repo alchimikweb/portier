@@ -7,7 +7,7 @@ describe Portier::ViewTagsPermission do
 
       context "with the undefined tag show_admin_link" do
         context "when checking if the user can view the show_admin_link" do
-          specify { expect { @permission.can_view?(:show_admin_link) }.to raise_error }
+          specify { expect { @permission.can_view?(:show_admin_link) }.to raise_error(Portier::NoPermissionError) }
         end
       end
 

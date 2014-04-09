@@ -9,15 +9,27 @@ describe ApplicationController do
     end
 
     def index
-      render text: 'Granted!'
+      if can_view?(:granted_response, show: true)
+        render text: 'Granted!'
+      else
+        render text: 'Nothing'
+      end
     end
 
     def create
-      render text: "Created! #{permitted_params}"
+      if can?(:create, :products)
+        render text: "Created! #{permitted_params}"
+      else
+        render text: "Not Created!"
+      end
     end
 
     def edit
       render text: 'Refused!'
+    end
+
+    def destroy
+      render text: 'Destroyed!'
     end
   end
 
@@ -46,6 +58,24 @@ describe ApplicationController do
       expect(response.status).to eq(200)
       expect(response.body).to include('email')
       expect(response.body).not_to include('role')
+    end
+  end
+
+  describe "when deleting an open record" do
+    it 'should grant access' do
+      delete :destroy, id: 'open'
+
+      expect(response.status).to eq(200)
+      expect(response.body).to eq "Destroyed!"
+    end
+  end
+
+  describe "when deleting an restricted record" do
+    it 'should not grant access' do
+      delete :destroy, id: 'restricted'
+
+      expect(response.status).to eq(401)
+      expect(response.body).to eq "access_denied"
     end
   end
 end
