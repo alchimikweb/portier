@@ -20,7 +20,7 @@ class Portier::Base
     object_name = if object.is_a? Symbol or object.is_a? String
       object.to_s.singularize.pluralize
     else
-      object.class.name
+      object.class.name.pluralize
     end
     permission = permission_for object_name
     permission.can? action, object, options
@@ -41,10 +41,10 @@ class Portier::Base
   end
 
   def base_permission
-    @base_permission ||= permission_for controller
+    @base_permission ||= permission_for controller_name
   end
 
-  def controller
+  def controller_name
     request[:controller]
   end
 
@@ -52,7 +52,7 @@ class Portier::Base
     begin
       "#{target.camelize}Permission".constantize.new(application_controller, current_user)
     rescue
-      raise Portier::Uninitalized, "You must define #{controller.camelize}Permission in app/permissions/#{controller}_permission.rb. See documentation for more details."
+        raise Portier::Uninitalized, "You must define #{controller_name.camelize}Permission in app/permissions/#{controller_name}_permission.rb. See documentation for more details."
     end
   end
 

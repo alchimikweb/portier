@@ -16,6 +16,10 @@ class Portier::BasePermission
   private
 
   def controller
+    @application_controller
+  end
+
+  def controller_name
     request[:controller]
   end
 

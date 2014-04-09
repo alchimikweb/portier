@@ -63,7 +63,7 @@ class Portier::ApplicationPermission < Portier::BasePermission
   end
 
   def model
-    controller.singularize.camelize.constantize
+    controller_name.singularize.camelize.constantize
   end
 
   def model_exists?
@@ -71,7 +71,7 @@ class Portier::ApplicationPermission < Portier::BasePermission
   end
 
   def record_name
-    controller.singularize.to_sym
+    controller_name.singularize.to_sym
   end
 
 
