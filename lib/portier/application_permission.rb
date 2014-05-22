@@ -17,10 +17,13 @@ class Portier::ApplicationPermission < Portier::BasePermission
 
 
   def build_permitted_params
-    puts params.inspect + record_name.inspect
     ps = self.respond_to?(:permitted_params) ? permitted_params : []
 
-    params.require(record_name).permit ps
+    begin
+      params.require(record_name).permit ps
+    rescue
+      {}
+    end
   end
 
   def can?(action, record, options={})

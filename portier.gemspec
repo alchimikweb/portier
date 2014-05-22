@@ -3,7 +3,7 @@ Gem::Specification.new do |gem|
   gem.description = "Portier is an gem that manage permissions in a rails project. The permission rules are flexible, non-obstrusive, scalable and can be applied to the controller actions, and views."
   gem.summary     = "Portier is an gem that manage permissions in a rails project. The permission rules are flexible, non-obstrusive, scalable and can be applied to the controller actions, and views."
   gem.homepage    = "https://bitbucket.org/alchimikweb/portier"
-  gem.version     = "1.0.0"
+  gem.version     = "1.0.1"
   gem.licenses    = ["MIT"]
 
   gem.authors     = ["Sebastien Rosa"]
