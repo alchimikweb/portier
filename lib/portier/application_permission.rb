@@ -81,6 +81,8 @@ class Portier::ApplicationPermission < Portier::BasePermission
   def method_missing(*args, &block)
     if args.first == record_name and model_exists?
       current_record
+    elsif current_record.class.to_s.downcase == args.first.to_s
+      current_record
     else
       raise NoMethodError.new("undefined local variable or method '#{args.first}' for #{self.class}")
     end
