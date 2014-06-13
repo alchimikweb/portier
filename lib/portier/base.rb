@@ -12,6 +12,10 @@ class Portier::Base
     @current_user = current_user
   end
 
+  def access_denied_message
+    base_permission.access_denied_message
+  end
+
   def authorize_action
     raise Portier::AccessDenied if not base_permission.granted? action
   end

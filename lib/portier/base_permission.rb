@@ -3,7 +3,7 @@
 # ApplicationPermission and ViewTagsPermission inherit from it
 #*************************************************************************************
 class Portier::BasePermission
-  attr_reader :application_controller, :current_user
+  attr_reader :access_denied_message, :application_controller, :current_user
 
   delegate :params, to: :application_controller
   delegate :request, to: :application_controller
@@ -11,6 +11,13 @@ class Portier::BasePermission
   def initialize(application_controller, current_user)
     @application_controller = application_controller
     @current_user = current_user
+    @access_denied_message = nil
+  end
+
+  def set_access_denied_message(message)
+    @access_denied_message = message
+
+    false
   end
 
   private

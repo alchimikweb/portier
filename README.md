@@ -65,6 +65,20 @@ The permission file will define the access rules to every action called on the c
       product.available?
     end
 
+    # You can set a custom error message with the method set_access_denied_message.
+    # This message will be available in the controllers and views throught the
+    # method access_denied_message. If it's not set, this method will return nil.
+    # set_access_denied_message always return false.
+    def create
+      if not current_user
+        set_access_denied_message "You need to log in to create this product."
+      elsif not current_user.can_create_product?
+        set_access_denied_message "You don't have the right to create product."
+      else
+        true
+      end
+    end
+
     # The access to the edit/update actions will only be available
     # if the current user is and Administrator
     # The current_user method must be defined in your ApplicationController

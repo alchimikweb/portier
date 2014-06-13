@@ -5,9 +5,13 @@ module Portier::Implants::ActionControllerImplant
   extend ActiveSupport::Concern
 
   included do
-    helper_method :can?, :can_view?
+    helper_method :access_denied_message, :can?, :can_view?
 
     rescue_from Portier::AccessDenied, with: :render_access_denied
+  end
+
+  def access_denied_message
+    @portier.access_denied_message
   end
 
   def can?(action, object, options={})

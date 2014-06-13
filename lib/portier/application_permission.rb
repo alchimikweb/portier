@@ -44,7 +44,6 @@ class Portier::ApplicationPermission < Portier::BasePermission
 
   private
 
-
   def action_tree(action)
     Portier::ApplicationPermission.action_tree(action)
   end
