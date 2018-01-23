@@ -4,8 +4,10 @@ module ViewHelpers
 
     app = double()
 
-    app.stub(:request).and_return({ controller: options[:controller], action: options[:action] })
-    app.stub(:params).and_return(options[:params])
+    allow(app).to receive_messages(
+      request: { controller: options[:controller], action: options[:action] },
+      params: options[:params]
+    )
 
     return app
   end

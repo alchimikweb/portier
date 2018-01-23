@@ -1,8 +1,11 @@
 require "spec_helper"
 
-describe ApplicationController do
+#describe ApplicationController do
+#end
+
+describe ApplicationController, :type => :controller do
   controller do
-    before_filter :protect_app
+    before_action :protect_app
 
     def current_user
       @user
@@ -10,26 +13,26 @@ describe ApplicationController do
 
     def index
       if can_view?(:granted_response, show: true)
-        render text: 'Granted!'
+        render plain: 'Granted!'
       else
-        render text: 'Nothing'
+        render plain: 'Nothing'
       end
     end
 
     def create
       if can?(:create, :products)
-        render text: "Created! #{permitted_params}"
+        render plain: "Created! #{permitted_params}"
       else
-        render text: "Not Created!"
+        render plain: "Not Created!"
       end
     end
 
     def edit
-      render text: 'Refused!'
+      render plain: 'Refused!'
     end
 
     def destroy
-      render text: 'Destroyed!'
+      render plain: 'Destroyed!'
     end
   end
 
@@ -44,7 +47,7 @@ describe ApplicationController do
 
   describe "when calling a restricted action" do
     it 'should not grant access' do
-      get :edit, id: '123'
+      get :edit, params: { id: '123' }
 
       expect(response.status).to eq(401)
       expect(response.body).to eq "access_denied"
@@ -53,7 +56,7 @@ describe ApplicationController do
 
   describe "when sending the role and the role is not allowed to be sent" do
     it 'should not have role in the permitted_params' do
-      post :create, anonymou: { name: '123', email: 'a@at.com', role: 'admin' }
+      post :create, params: { anonymou: { name: '123', email: 'a@at.com', role: 'admin' }}
 
       expect(response.status).to eq(200)
       expect(response.body).to include('email')
@@ -63,7 +66,7 @@ describe ApplicationController do
 
   describe "when deleting an open record" do
     it 'should grant access' do
-      delete :destroy, id: 'open'
+      delete :destroy, params: { id: 'open' }
 
       expect(response.status).to eq(200)
       expect(response.body).to eq "Destroyed!"
@@ -72,7 +75,7 @@ describe ApplicationController do
 
   describe "when deleting an restricted record" do
     it 'should not grant access' do
-      delete :destroy, id: 'restricted'
+      delete :destroy, params: { id: 'restricted' }
 
       expect(response.status).to eq(401)
       expect(response.body).to eq "access_denied"

@@ -12,18 +12,18 @@ describe Portier::ViewTagsPermission do
       end
 
       context "with the tag show_admin_link restricting access to the user" do
-        before { @permission.stub(:show_admin_link).and_return false }
+        before { allow(@permission).to receive_messages(show_admin_link: false) }
 
         context "when checking if the user can view the show_admin_link" do
-          specify { @permission.can_view?(:show_admin_link).should be_false }
+          specify { expect(@permission.can_view?(:show_admin_link)).to be_falsey }
         end
       end
 
       context "with the tag show_admin_link allowing access to the user" do
-        before { @permission.stub(:show_admin_link).and_return true }
+        before { allow(@permission).to receive_messages(show_admin_link: true) }
 
         context "when checking if the user can view the show_admin_link" do
-          specify { @permission.can_view?(:show_admin_link).should be_true }
+          specify { expect(@permission.can_view?(:show_admin_link)).to be_truthy }
         end
       end
     end

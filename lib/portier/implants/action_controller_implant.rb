@@ -32,6 +32,6 @@ module Portier::Implants::ActionControllerImplant
   end
 
   def render_access_denied
-    render text: "access_denied", status: 401
+    render plain: "access_denied", status: 401
   end
 end

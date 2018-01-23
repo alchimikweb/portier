@@ -11,7 +11,8 @@ describe Portier::ApplicationPermission do
 
   describe "#default" do
     it "should be protected by default" do
-      Portier::ApplicationPermission.new(double(:app), double(:user)).default.should be_false
+      permission = Portier::ApplicationPermission.new(double(:app), double(:user)).default
+      expect(permission).to be_falsey
     end
   end
 

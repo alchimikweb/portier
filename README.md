@@ -26,7 +26,7 @@ In order to let portier control the requests to your application, you need to ad
     protect_from_forgery with: :exception
 
     # This filter the requests using the permission files
-    before_filter :protect_app
+    before_action :protect_app
 
     # You can define the current_user anyway you want as long as it return the current user record.
     def current_user
@@ -163,7 +163,15 @@ Both ```can?``` and ```can_view?``` methods can take options
   end
 ```
 
+### namespace
 
+If you are using namespacing in your controller, you can pass the namespace option.
+
+```erb
+  <%# app/views/admin/products/show.html.erb %>
+
+  <%= link_to 'Edit product', edit_product_path(id: @product.id) if can? :edit, @product, namespace: :admin %>
+```
 
 Copyright
 ---------

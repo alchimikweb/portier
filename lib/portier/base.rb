@@ -26,6 +26,9 @@ class Portier::Base
     else
       object.class.name.pluralize
     end
+
+    object_name = "#{options[:namespace].to_s.camelize}::#{object_name.camelize}" if options[:namespace]
+
     permission = permission_for object_name
     permission.can? action, object, options
   end
@@ -56,7 +59,7 @@ class Portier::Base
     begin
       "#{target.camelize}Permission".constantize.new(application_controller, current_user)
     rescue
-        raise Portier::Uninitalized, "You must define #{controller_name.camelize}Permission in app/permissions/#{controller_name}_permission.rb. See documentation for more details."
+      raise Portier::Uninitalized, "You must define #{target.camelize}Permission in app/permissions/#{target}_permission.rb. See documentation for more details."
     end
   end
 
